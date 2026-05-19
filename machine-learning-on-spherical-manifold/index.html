@@ -1,0 +1,694 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://eesuck1.github.io/machine-learning-on-spherical-manifold/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/icon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Machine Learning on Spherical Manifold - Volodymyr Isak Personal Tech Blog</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="black">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#problem-statement" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Volodymyr Isak Personal Tech Blog" class="md-header__button md-logo" aria-label="Volodymyr Isak Personal Tech Blog" data-md-component="logo">
+      
+  <img src="../assets/icon.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Volodymyr Isak Personal Tech Blog
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Machine Learning on Spherical Manifold
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="black"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="white"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Volodymyr Isak Personal Tech Blog" class="md-nav__button md-logo" aria-label="Volodymyr Isak Personal Tech Blog" data-md-component="logo">
+      
+  <img src="../assets/icon.svg" alt="logo">
+
+    </a>
+    Volodymyr Isak Personal Tech Blog
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Me
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#problem-statement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problem Statement
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solving-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solving Plan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solving Plan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#euclidean-gradient-via-autograd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Euclidean Gradient via Autograd
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tangent-space-projection-and-the-exponential-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tangent Space Projection and The Exponential Map
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gradient-descent-on-sphere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Gradient Descent on Sphere
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href=".." class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2026-05-17 00:00:00+00:00" class="md-ellipsis">May 17, 2026</time>
+                      </div>
+                    </li>
+                    
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              7 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+            
+          </nav>
+          
+        </div>
+      </div>
+    </div>
+    <article class="md-content__inner md-typeset">
+      
+        
+  
+
+
+
+
+  <h1>Machine Learning on Spherical Manifold</h1>
+
+<p>There are a variety of application where an <span class="arithmatex">\(n\)</span>-dimensional hypersphere is a natural domain for data. For example images from 360-degrees cameras or weather on the Earth. But basic machine learning algorithms are expected to take place on regular Euclidean space, therefore it is hard to preserve the spherical structure of the domen. In order to overcome this difficulty, we can introduce additional structure to basic optimization algorithms like Gradient Descent, to enforce them to work on sphere.</p>
+<!-- more -->
+<h2 id="problem-statement">Problem Statement</h2>
+<p>The basic gradient descent algorithm optimazes the parameters of function <span class="arithmatex">\(f_{\theta}\)</span> via introducing the loss function, and computing the direction of steepest descent of that function with respect to parameters. This function maps a pair (prediction, target) to non-negative real value <span class="arithmatex">\(\mathcal{L} : \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}^+_{0}\)</span>, this value shows how good the hypothesis (e.g. neural network) approximates the target labels distribution.</p>
+<p>But this immidiatly introduces the problem if we want to optimize the parameters that live on some sort of manifold. The optimizer is completely unaware of geometrical structure of our data, and therefore can easily move parameters out of manifold to embedding space. Even tough there are implicit regularization from optimization algorithm (SGD find the solution with smallest <span class="arithmatex">\(L^2\)</span> norm) and explicit regularization from function structure (for example convolution operator must respect translation symmetry), which narrows the search space, it's not enough to ensure that parameters will respect out geometrical priors (stay on sphere).</p>
+<p>For example let's take a look at simple function with parameters vector <span class="arithmatex">\([\theta_{0}, \theta_{1}]^\top\)</span>, and we want the length of this vector to always be <span class="arithmatex">\(1\)</span>. So our parameters must live on a one-dimensional spherical manifold <span class="arithmatex">\(S^1\)</span>, embedded in <span class="arithmatex">\(\mathbb{R}^{2}\)</span>. Often it's treated like 2D object, because of embedding space <span class="arithmatex">\(\mathbb{R}^{2}\)</span>, but circle itself can be parametrized with single angle value, so it's actually the 1D manifold. But working with manifold in intrinsic coordinates is more difficult, because there is no general coordinate system to store them as arrays. So we will stick with embedding space coordinates and just introduce constraints for vectors.</p>
+<p>The illustration below, shows points on circle <span class="arithmatex">\(u\)</span> and tangent vector at this point <span class="arithmatex">\(v\)</span>, the basic vector sum is shown on the left, and as we can see the resulting vector is no longer on circle. The right image shows how we would like to fix our problem: a mysterious map <span class="arithmatex">\(\exp\)</span>, which takes the vector from tangent space <span class="arithmatex">\(T_{u}S\)</span> and creates the shortest path on manifold <span class="arithmatex">\(\gamma(t)\)</span> in direction of vector <span class="arithmatex">\(v\)</span> and with same magnitude.
+<img alt="Pasted image 20260518123947.png" src="../Pasted%20image%2020260518123947.png" /></p>
+<h2 id="solving-plan">Solving Plan</h2>
+<p>Now, when we understand the problem, the solution comes naturally:</p>
+<ol>
+<li>Perform basic gradient descent and obtain gradient vector <span class="arithmatex">\(\nabla_{\theta}\mathcal{L}\)</span>, which often points in arbitrary direction.</li>
+<li>Project gradient vector to tangent space at points <span class="arithmatex">\(u\)</span>.</li>
+<li>Wrap this vector around the sphere, and move the point in this direction (use exponential map).</li>
+</ol>
+<h3 id="euclidean-gradient-via-autograd">Euclidean Gradient via Autograd</h3>
+<p>Obtaining the Euclidean gradient is done using PyTorch <code>autograd</code> tool, which builds dynamic computation graph of an expression, and computes all partial derivatives automatically. For example consider expression <span class="arithmatex">\(f(a, b, c) = a + b \cdot c\)</span>, compute partial derivatives with respect to each argument: <span class="arithmatex">\(\frac{ \partial f }{ \partial a } = 1, \frac{ \partial f }{ \partial b } = c, \frac{ \partial f }{ \partial c } = b\)</span>, and implement same in PyTorch:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>a = torch.tensor(2.0, requires_grad=True)  
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>b = torch.tensor(3.0, requires_grad=True)  
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>c = torch.tensor(4.0, requires_grad=True)  
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>d = a + b * c  
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>d.backward()  
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>print(f&quot;a gradient: {a.grad:.3f}&quot;)  
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>print(f&quot;b gradient: {b.grad:.3f}&quot;)  
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>print(f&quot;c gradient: {c.grad:.3f}&quot;)
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>--- Output ---
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>a gradient: 1.000
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>b gradient: 4.000
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>c gradient: 3.000
+</code></pre></div>
+<h3 id="tangent-space-projection-and-the-exponential-map">Tangent Space Projection and The Exponential Map</h3>
+<p>When we have the instrument to obtain gradient, we need to come up with a way to move a point in parameter space according to the direction and magnitude of the gradient vector. To accomplish this we will first introduce the concept of <em>geodesic</em> of manifold. 
+Geodesic curve <span class="arithmatex">\(\gamma : [a,b] \to \Omega\)</span> is a parametrized function, that maps a real-valued "time" parameter <span class="arithmatex">\(t \in [a, b]\)</span> to points on the manifold <span class="arithmatex">\(\Omega\)</span>, in such a way, that walking along this curve yields the shortest possible path between <span class="arithmatex">\(u = \gamma(a)\)</span> on this manifold to another point <span class="arithmatex">\(v = \gamma(b)\)</span> also on this manifold:</p>
+<div class="arithmatex">\[
+\gamma = \arg \min \int_{a}^{b} \| \gamma'(t)\|_{\gamma(t)} \ dt \quad \text{s.t.} \quad \gamma(a) = u, \gamma(b) = v
+\]</div>
+<p>Now, the exponential map <span class="arithmatex">\(\exp_{u}(v)\)</span> from a point <span class="arithmatex">\(u\)</span> in the direction <span class="arithmatex">\(v\)</span>, is defined as a geodesic curve <span class="arithmatex">\(\gamma\)</span>, such that <span class="arithmatex">\(\gamma(0) = u, \ \gamma'(0) = v\)</span> and <span class="arithmatex">\(\exp_{u}(v) = \gamma(1)\)</span>. The exponential map works only with vectors from a tangent space <span class="arithmatex">\(T_{u}\Omega\)</span>, so the gradient vector must be projected. Any vector at a given point can be decomposed as a sum of tangent and normal component <span class="arithmatex">\(g = g_{\parallel} + g_{\perp}\)</span>, so to obtain the tangent component we need to find a normal projection of gradient vector. This is very easy to do on sphere, because the point <span class="arithmatex">\(u\)</span> itself is the normal to the surface, so we just need to project the gradient onto <span class="arithmatex">\(u\)</span> and subtract it like this <span class="arithmatex">\(g_{\parallel} = g - \langle u, g\rangle \cdot u\)</span>.</p>
+<p align="center"><img alt="Pasted image 20260519215344.png" src="../Pasted%20image%2020260519215344.png" width="450" /></p>
+<p>Having the tangent vector, the idea of how to perform an exponential map is the following: consider the intersection of a 2D plane that goes through <span class="arithmatex">\(u\)</span> and tangent vector <span class="arithmatex">\(v\)</span>, and our <span class="arithmatex">\(n\)</span>-dimensional hypersphere, this intersection will itself be the 2D (in terms of embedding space) circle, and our vectors will form an orthogonal basis in this subspace.</p>
+<p align="center"><img alt="Pasted image 20260519221316.png" src="../Pasted%20image%2020260519221316.png" width="400" /></p>
+<p>Vector <span class="arithmatex">\(v\)</span> is not necessary a unit length, so it must be normalized. Then the point on this circle can be decomposed in classic manner with cosine and sine, where the angle in radians is the length of <span class="arithmatex">\(v\)</span>, because the angle in radians is actually the length of the arc between two points (normalized by a radius).</p>
+<div class="arithmatex">\[
+\exp_{u}(v) = \cos(\| v \|t) \cdot u + \sin(\| v \|t) \cdot \frac{v}{\| v\|}
+\]</div>
+<p>The parameter <span class="arithmatex">\(t\)</span> allows us to control how far we can go along <span class="arithmatex">\(v\)</span>, sphere is the perfectly symmetrical space, so there is a convenient formula, but it's not always the case. Generally speaking, the exponential map is a local transformation, so often we need to recompute the transformation at each point along the way. </p>
+<h2 id="gradient-descent-on-sphere">Gradient Descent on Sphere</h2>
+<p>Now, when we have all necessary components, we can create an spherical version of Stochastic Gradient Descent optimizer. It's convenient to use already defined in PyTorch <code>Optimizer</code> class and just override the optimization <code>step</code> method. The full version of this and other geometric tools used here can be found at my <a href="https://github.com/eesuck1/Gilka">github repository</a>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>class RSGD(optim.Optimizer):  
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    def __init__(self, params, manifold: Manifold, lr: float = 3e-4):  
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>        if lr &lt;= 0.0:  
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>            raise ValueError(f&quot;Invalid learning rate: {lr}&quot;)  
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        defaults = dict(lr=lr, manifold=manifold)
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>        super().__init__(params, defaults)  
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    @torch.no_grad()  
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    def step(self, closure) -&gt; float | None:  
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        &quot;&quot;&quot;  
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        Performs the optimization step on given Manifolds.        
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        &quot;&quot;&quot;  
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>        for group in self.param_groups:  
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>            lr = group[&quot;lr&quot;]  
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>            manifold = group[&quot;manifold&quot;]  
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>            for params in group[&quot;params&quot;]:  
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>                if params.grad is None:  
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>                    continue  
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>                grad = manifold.proj_v(params, params.grad)  
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>                new_params = manifold.exp_map(params, -grad, lr)  
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>                params.copy_(new_params)
+</code></pre></div>
+<p>To test this solution let's solve the simple optimization problem of finding the Frechet mean with respect to <span class="arithmatex">\(L^1\)</span> norm on a sphere. The objective is to find such anchor point <span class="arithmatex">\(a\)</span>, that minimizes the following expression:</p>
+<div class="arithmatex">\[
+a = \arg \min \sum_{n \in \mathcal{N}} \text{dist}(a, n)
+\]</div>
+<p>Where, <span class="arithmatex">\(\mathcal{N}\)</span> is node points distribution, and <span class="arithmatex">\(\text{dist}\)</span> is distance metric. On sphere with radius <span class="arithmatex">\(r\)</span> the <em>intrinsic</em> distance is defined as <span class="arithmatex">\(r \cdot \arccos (\langle u, v\rangle)\)</span> (intrinsic, because we can also measure the distance between points in embedding space, so called <em>extrinsic</em> distance).</p>
+<p>Python implementation is quite straightforward at this point: initializing the random points on sphere, computing the mean distance between anchor and nodes, and update anchor position.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>def spherical_l1(sphere: Sphere, nods: torch.Tensor, anchor: torch.Tensor) -&gt; torch.Tensor:  
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>    dist = sphere.dist(nods, anchor)  
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>    mean_dist = torch.mean(dist)  
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    return mean_dist
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>def optimize_spherical() -&gt; None:  
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    d = 3  
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    n = 10  
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    sigma = 1.5  
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    nods = torch.ones(n, d)  
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    nods = nods + torch.randn_like(nods) * sigma  
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    S2 = Sphere(3)  
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    nods = S2.proj_x(nods)  
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>    euclidean_anchor = S2.proj_x(nods.mean(dim=0, keepdim=True))  
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    anchor = torch.randn(1, d)  
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    anchor = S2.proj_x(anchor)  
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    anchor = anchor.detach().requires_grad_(True)  
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    epochs = 1000  
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    lr = 1e-2  
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>    optimizer = RSGD([anchor], S2, lr)  
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a>
+<a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a>    for epoch in range(epochs + 1):  
+<a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a>        optimizer.zero_grad()  
+<a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>
+<a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a>        loss = spherical_l1(S2, nods, anchor)  
+<a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a>        loss.backward()  
+<a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a>
+<a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>        optimizer.step()  
+<a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>
+<a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>        if epoch % 50 == 0 and epoch != 0:  
+<a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>            lr = lr * 0.95  
+<a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>
+<a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>            print(f&quot;[{epoch}/{epochs}] Mean L2 Distance: {loss.item():.4f} | New Learning Rate: {lr:.4f}&quot;)  
+<a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>
+<a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>    print(f&quot;RSGD Mean Distance: {spherical_l1(S2, nods, anchor).item():.4f}&quot;)  
+<a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>    print(f&quot;Euclidean Mean Distance: {spherical_l1(S2, nods, euclidean_anchor).item():.4f}&quot;)
+<a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>
+<a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a>--- Output ---
+<a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a>
+<a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>...
+<a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a>
+<a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a>RSGD Mean Distance: 0.2430
+<a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a>Projected Extrinsic Mean Distance: 0.2439
+</code></pre></div>
+<p>The initialization state showed on the left, the green point denotes an anchor, when orange points are nodes. The right image shows the optimized state, and red point is the projected back on sphere extrinsic mean. 
+<img alt="spheres.svg" src="../spheres.svg" width="697" /></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+  
+
+
+
+  <h2 id="__comments">Comments</h2>
+  
+  <script src="https://giscus.app/client.js"
+        data-repo="eesuck1/eesuck1.github.io"
+        data-repo-id="R_kgDOSgFIhw"
+        data-category="[ENTER CATEGORY NAME HERE]"
+        data-category-id="[ENTER CATEGORY ID HERE]"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+  
+  <script>
+    var giscus = document.querySelector("script[src*=giscus]")
+    var palette = __md_get("__palette")
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate" ? "dark" : "light"
+      giscus.setAttribute("data-theme", theme)
+    }
+    document.addEventListener("DOMContentLoaded", function() {
+      var ref = document.querySelector("[data-md-component=palette]")
+      ref.addEventListener("change", function() {
+        var palette = __md_get("__palette")
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate" ? "dark" : "light"
+          var frame = document.querySelector(".giscus-frame")
+          frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme } } },
+            "https://giscus.app"
+          )
+        }
+      })
+    })
+  </script>
+
+      
+    </article>
+  </div>
+
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 Volodymyr Isak &bull; Content is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC BY-NC 4.0</a>
+    </div>
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
