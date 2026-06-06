@@ -414,7 +414,7 @@
   </header>
   <div class="md-post__content md-typeset">
     <h2 id="on-image-generation"><a class="toclink" href="on-image-generation/">On Image Generation</a></h2>
-<p>Let's consider a regular 2D grid of dimensions <span class="arithmatex">\(H \times W\)</span> as a base <span class="arithmatex">\(\Omega = \{ 1, \dots, H \} \times \{ 1, \dots, W \} \subset \mathbb{Z}^{2}\)</span>. Along with the RGB color space <span class="arithmatex">\(C = \mathbb{R}^{3}\)</span>, this grid forms a trivial bundle <span class="arithmatex">\(E = \Omega \times C\)</span>. An image is then a global section <span class="arithmatex">\(x : \Omega \to E\)</span>, such that <span class="arithmatex">\(x(u) = (u_{0}, u_{1}, I(u_{0}, u_{1}))\)</span>, where <span class="arithmatex">\(I\)</span> is a function mapping each pixel coordinate to an RGB color vector. The space of all images <span class="arithmatex">\(\mathcal{X} = \Gamma(E)\)</span> is the space of all possible such sections.</p>
+<p>Modern generative machine learning has achieved impressive empirical results, yet most existing approaches treat images merely as discrete pixel matrices. To build a mathematically rigorous generative paradigm, we must abandon the naive coordinate representation and view the image space through the lens of differential geometry and bundle theory.</p>
 
     
       <nav class="md-post__action">
