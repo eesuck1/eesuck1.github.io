@@ -8,13 +8,11 @@
       
       
       
-        <link rel="canonical" href="https://eesuck1.github.io/on-machine-learning-with-stiefel-manifold/">
+        <link rel="canonical" href="https://eesuck1.github.io/on-image-generation/">
       
       
-        <link rel="prev" href="../machine-learning-on-spherical-manifold/">
+        <link rel="prev" href="../on-machine-learning-with-stiefel-manifold/">
       
-      
-        <link rel="next" href="../on-image-generation/">
       
       
         
@@ -25,7 +23,7 @@
     
     
       
-        <title>On Machine Learning with Stiefel Manifold - Volodymyr Isak Personal Tech Blog</title>
+        <title>On Image Generation - Volodymyr Isak Personal Tech Blog</title>
       
     
     
@@ -108,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              On Machine Learning with Stiefel Manifold
+              On Image Generation
             
           </span>
         </div>
@@ -337,7 +335,7 @@
                     <li class="md-nav__item">
                       <div class="md-nav__link">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
-                        <time datetime="2026-06-03 00:00:00+00:00" class="md-ellipsis">June 3, 2026</time>
+                        <time datetime="2026-06-05 00:00:00+00:00" class="md-ellipsis">June 5, 2026</time>
                       </div>
                     </li>
                     
@@ -349,7 +347,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
                           <span class="md-ellipsis">
                             
-                              2 min read
+                              3 min read
                             
                           </span>
                         </div>
@@ -373,25 +371,23 @@
 
 
 
-  <h1>On Machine Learning with Stiefel Manifold</h1>
+  <h1>On Image Generation</h1>
 
-<p>The Stiefel manifold is a useful geometric object in machine learning because there are applications where the target transformation must preserve the norm of input vectors. </p>
+<p>Let's consider a regular 2D grid of dimensions <span class="arithmatex">\(H \times W\)</span> as a base <span class="arithmatex">\(\Omega = \{ 1, \dots, H \} \times \{ 1, \dots, W \} \subset \mathbb{Z}^{2}\)</span>. Along with the RGB color space <span class="arithmatex">\(C = \mathbb{R}^{3}\)</span>, this grid forms a trivial bundle <span class="arithmatex">\(E = \Omega \times C\)</span>. An image is then a global section <span class="arithmatex">\(x : \Omega \to E\)</span>, such that <span class="arithmatex">\(x(u) = (u_{0}, u_{1}, I(u_{0}, u_{1}))\)</span>, where <span class="arithmatex">\(I\)</span> is a function mapping each pixel coordinate to an RGB color vector. The space of all images <span class="arithmatex">\(\mathcal{X} = \Gamma(E)\)</span> is the space of all possible such sections.</p>
 <!-- more -->
-<p>For example, in recurrent neural networks (RNNs), the transformation formula is defined as:</p>
-<div class="arithmatex">\[h_t = \sigma(W_{rec}h_{t-1} + W_{in}x_{t-1} + b)\]</div>
-<p>Here, <span class="arithmatex">\(W_{rec}\)</span> is a linear transformation acting on the previous system state, <span class="arithmatex">\(W_{in}\)</span> is a linear transformation for the input data from the current time step, <span class="arithmatex">\(b\)</span> is a bias, and <span class="arithmatex">\(\sigma\)</span> is a non-linearity. This is a very powerful idea that gives a model a notion of memory through its previous states. However, it also introduces a significant problem: vanishing and exploding gradients. Let's examine how the current state depends on previous ones, assuming an identity transformation for the activation function (<span class="arithmatex">\(\sigma = \text{id}\)</span>):</p>
-<div class="arithmatex">\[\frac{\partial h_t}{\partial h_{t-1}} = \frac{\partial}{\partial h_{t-1}}(W_{rec}h_{t-1} + W_{in}x_{t-1} + b) = W_{rec}\]</div>
-<p>Using the chain rule, let's find the expression for step <span class="arithmatex">\(t-2\)</span>:</p>
-<div class="arithmatex">\[\frac{\partial h_t}{\partial h_{t-2}} = \frac{\partial h_t}{\partial h_{t-1}} \frac{\partial h_{t-1}}{\partial h_{t-2}} = W_{rec}W_{rec} = W_{rec}^2\]</div>
-<p>In general, for a time step <span class="arithmatex">\(k \leq t\)</span>, the expression is as follows:</p>
-<div class="arithmatex">\[\frac{\partial h_t}{\partial h_k} = W_{rec}^{t-k}\]</div>
-<p>It is now clear that for matrices <span class="arithmatex">\(W_{rec}\)</span> with eigenvalues (or singular values for non-square matrices) <span class="arithmatex">\(|\lambda| &gt; 1\)</span>, the gradients will grow exponentially as <span class="arithmatex">\(t\)</span> increases. Conversely, for <span class="arithmatex">\(|\lambda| &lt; 1\)</span>, the gradients will decay exponentially. To see this, let's use the eigendecomposition of the matrix <span class="arithmatex">\(W_{rec}\)</span>:</p>
-<div class="arithmatex">\[W_{rec} = Q \Lambda Q^{-1}\]</div>
-<p>Raising it to the <span class="arithmatex">\(t\)</span>-th power:</p>
-<div class="arithmatex">\[W_{rec}^t = Q \Lambda Q^{-1} Q \Lambda Q^{-1} \dots Q \Lambda Q^{-1} = Q \Lambda^t Q^{-1}\]</div>
-<p>The traditional approach to solving this problem is to use LSTM or GRU architectures, which replace the multiplication operations with addition. Alternatively, we can use a more geometric approach by applying a constraint on the weights of <span class="arithmatex">\(W_{rec}\)</span> such that their eigenvalues (or singular values) remain equal to 1. Essentially, we want to ensure that our transformation does not impact the norm of the vector, but only introduces a rotation. This can be achieved using the Stiefel manifold, which can be defined with respect to the Euclidean topology as:</p>
-<div class="arithmatex">\[V_k(\mathbb{R}^n) := \{ X \mid X^\top X = \mathbb{I}_k, k \leq n \}\]</div>
-<p>Keeping the weights of <span class="arithmatex">\(W_{rec}\)</span> on this manifold ensures that gradients will not vanish or explode after an arbitrary number of time steps <span class="arithmatex">\(t\)</span>. However, this restricts the class of transformations to rotations only.</p>
+<p>The task of image generation can be formalized as finding optimal parameters for a function <span class="arithmatex">\(\Phi_{\theta} : \Psi \to \mathcal{X}\)</span>, mapping from an input constraint space <span class="arithmatex">\(\Psi\)</span> to <span class="arithmatex">\(\mathcal{X}\)</span>. However, the core conjecture of modern generative modeling is that realistic images do not scatter randomly within the ambient space <span class="arithmatex">\(\mathcal{X}\)</span>, but rather concentrate on a lower-dimensional smooth manifold <span class="arithmatex">\(\mathcal{M} \subset \mathcal{X}\)</span>.</p>
+<p>Since we know very little about the explicit topology of this subspace, we cannot simply drop a point onto <span class="arithmatex">\(\mathcal{M}\)</span>, move it around, and analytically lift it back to <span class="arithmatex">\(\mathcal{X}\)</span> to get a pleasant-looking image. The fundamental process of generation or semantic editing should mathematically look like this:</p>
+<ol>
+<li>Obtain a starting point <span class="arithmatex">\(p \in \mathcal{M}\)</span>.</li>
+<li>Project the conditional context <span class="arithmatex">\(y \in \Psi\)</span> (e.g., text prompt or editing parameter) into a tangent vector <span class="arithmatex">\(v \in T_p\mathcal{M}\)</span>.</li>
+<li>Perform a retraction <span class="arithmatex">\(R_p: T_p\mathcal{M} \to \mathcal{M}\)</span> along the vector <span class="arithmatex">\(v\)</span> to find a new, semantically shifted point on the manifold.</li>
+<li>Lift the point back to the pixel space using a learned decoder <span class="arithmatex">\(\Sigma: \mathcal{M} \to \mathcal{X}\)</span>.</li>
+</ol>
+<p>This formulation opens up several profound and unresolved challenges in geometric deep learning: how to gracefully land a point <span class="arithmatex">\(p\)</span> on <span class="arithmatex">\(\mathcal{M}\)</span>, how to learn the projection map <span class="arithmatex">\(\Lambda: \Psi \times \mathcal{M} \to T_p\mathcal{M}\)</span>, and how to execute stable retractions.</p>
+<p>For the retraction step <span class="arithmatex">\(R_p(v)\)</span>, I believe it could be effectively modeled as an iterative process <em>inside</em> the neural network. Just as iterative root-finding algorithms (like Newton-Raphson) refine numerical solutions, a neural model might better approximate the complex geometry of a retraction by taking multiple small, iterative steps rather than predicting the final position in a single forward pass.</p>
+<p>The problem of finding the initial point <span class="arithmatex">\(p\)</span> becomes trivial if we are doing Image-to-Image translation (or image enhancement). We already have an anchor image <span class="arithmatex">\(x\)</span>, and we know how to project it onto the manifold using an encoder map <span class="arithmatex">\(\Pi: \mathcal{X} \to \mathcal{M}\)</span> from a standard autoencoder.</p>
+<p>However, if we want to generate an image completely from scratch, placing that initial point <span class="arithmatex">\(p \in \mathcal{M}\)</span> becomes a serious hurdle. We could try to pre-train an autoencoder, statistically analyze the latent space it forms, and compute something like a Fréchet mean on the manifold to serve as a universal starting anchor.</p>
+<p>An even more interesting problem for research is how we actually map images onto the manifold. Instead of training a traditional encoder that acts as a direct map <span class="arithmatex">\(\Pi: \mathcal{X} \to \mathcal{M}\)</span>, we can fix a single, universal base point <span class="arithmatex">\(p_0 \in \mathcal{M}\)</span> (a learned canonical state). For any given target image <span class="arithmatex">\(x \in \mathcal{X}\)</span>, the network's goal is not to predict absolute coordinates, but rather to construct a vector in the tangent space at the base point, <span class="arithmatex">\(v_x \in T_{p_0}\mathcal{M}\)</span>. The projection of the image onto the manifold is then defined through a retraction <span class="arithmatex">\(p_x = R_{p_0}(v_x)\)</span>, such that our decoding map reconstructs the image: <span class="arithmatex">\(\Sigma(R_{p_0}(v_x)) = x\)</span>. This shifts the learning paradigm from predicting absolute spatial locations on an unknown manifold to learning stable relative deformations from a shared geometric origin.</p>
 
 
 
