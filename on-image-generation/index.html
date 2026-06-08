@@ -75,6 +75,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#introduction" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -300,6 +305,58 @@
   
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#poincare-ball-embeddings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Poincare Ball Embeddings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#following-idea" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Following Idea
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conclusion
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -347,7 +404,7 @@
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
                           <span class="md-ellipsis">
                             
-                              3 min read
+                              8 min read
                             
                           </span>
                         </div>
@@ -375,21 +432,158 @@
 
 <p>Modern generative machine learning has achieved impressive empirical results, yet most existing approaches treat images merely as discrete pixel matrices. To build a mathematically rigorous generative paradigm, we must abandon the naive coordinate representation and view the image space through the lens of differential geometry and bundle theory.</p>
 <!-- more -->
+<h2 id="introduction">Introduction</h2>
 <p>Let a regular 2D grid of dimensions <span class="arithmatex">\(H \times W\)</span> be a base <span class="arithmatex">\(\Omega = \{ 1, \dots, H \} \times \{ 1, \dots, W \} \subset \mathbb{Z}^{2}\)</span>. Along with the RGB color space <span class="arithmatex">\(C = \mathbb{R}^{3}\)</span>, this grid forms a trivial bundle <span class="arithmatex">\(E = \Omega \times C\)</span>. Every specific image is then a global section <span class="arithmatex">\(x : \Omega \to E\)</span>, such that <span class="arithmatex">\(x(u) = (u_{0}, u_{1}, I(u_{0}, u_{1}))\)</span>, where <span class="arithmatex">\(I\)</span> is a function mapping each pixel coordinate to a corresponding RGB color vector. The space of all possible images <span class="arithmatex">\(\mathcal{X} = \Gamma(E)\)</span> is the space of all such global sections.</p>
-<p>Although this space <span class="arithmatex">\(\mathcal{X}\)</span> contains huge number of pixel combinations, real, meaningful images are densely clustered in a much narrower region of it.</p>
-<p>The task of image generation can be formalized as finding optimal parameters for a function <span class="arithmatex">\(\Phi_{\theta} : \Psi \to \mathcal{X}\)</span>, mapping from an input constraint space <span class="arithmatex">\(\Psi\)</span> to <span class="arithmatex">\(\mathcal{X}\)</span>. However, the core conjecture of modern generative modeling is that realistic images do not scatter randomly within the ambient space <span class="arithmatex">\(\mathcal{X}\)</span>, but rather concentrate on a lower-dimensional smooth manifold <span class="arithmatex">\(\mathcal{M} \subset \mathcal{X}\)</span>.</p>
+<p>Although this space <span class="arithmatex">\(\mathcal{X}\)</span> contains a huge number of pixel combinations, real, meaningful images are densely clustered in a much narrower region of it.</p>
+<p>The task of image generation can be formalized as finding optimal parameters for a function <span class="arithmatex">\(f_{\theta} : Z \to \mathcal{X}\)</span>, mapping from an input constraint space <span class="arithmatex">\(Z\)</span> to <span class="arithmatex">\(\mathcal{X}\)</span>. However, the core conjecture of modern generative modeling is that realistic images do not scatter randomly within the ambient space <span class="arithmatex">\(\mathcal{X}\)</span>, but rather concentrate on a lower-dimensional smooth manifold <span class="arithmatex">\(\mathcal{M} \subset \mathcal{X}\)</span>.</p>
 <p>Since we know very little about the explicit topology of this subspace, we cannot simply drop a point onto <span class="arithmatex">\(\mathcal{M}\)</span>, move it around, and analytically lift it back to <span class="arithmatex">\(\mathcal{X}\)</span> to get a pleasant-looking image. The fundamental process of generation or semantic editing should mathematically look like this:</p>
 <ol>
 <li>Obtain a starting point <span class="arithmatex">\(p \in \mathcal{M}\)</span>.</li>
-<li>Project the conditional context <span class="arithmatex">\(y \in \Psi\)</span> (e.g., text prompt or editing parameter) into a tangent vector <span class="arithmatex">\(v \in T_p\mathcal{M}\)</span>.</li>
+<li>Project the conditional context <span class="arithmatex">\(y \in Z\)</span> (e.g., text prompt or editing parameter) into a tangent vector <span class="arithmatex">\(v \in T_p\mathcal{M}\)</span>.</li>
 <li>Perform a retraction <span class="arithmatex">\(R_p: T_p\mathcal{M} \to \mathcal{M}\)</span> along the vector <span class="arithmatex">\(v\)</span> to find a new, semantically shifted point on the manifold.</li>
-<li>Lift the point back to the pixel space using a learned decoder <span class="arithmatex">\(\Sigma: \mathcal{M} \to \mathcal{X}\)</span>.</li>
+<li>Lift the point back to the pixel space using a learned decoder <span class="arithmatex">\(D: \mathcal{M} \to \mathcal{X}\)</span>.</li>
 </ol>
-<p>This formulation opens up several profound and unresolved challenges in geometric deep learning: how to gracefully land a point <span class="arithmatex">\(p\)</span> on <span class="arithmatex">\(\mathcal{M}\)</span>, how to learn the projection map <span class="arithmatex">\(\Lambda: \Psi \times \mathcal{M} \to T_p\mathcal{M}\)</span>, and how to execute stable retractions.</p>
+<p>This formulation opens up several profound and unresolved challenges in geometric deep learning: how to gracefully land a point <span class="arithmatex">\(p\)</span> on <span class="arithmatex">\(\mathcal{M}\)</span>, how to learn the projection map <span class="arithmatex">\(\Pi: Z \times \mathcal{M} \to T_p\mathcal{M}\)</span>, and how to execute stable retractions.</p>
 <p>For the retraction step <span class="arithmatex">\(R_p(v)\)</span>, I believe it could be effectively modeled as an iterative process <em>inside</em> the neural network. Just as iterative root-finding algorithms (like Newton-Raphson) refine numerical solutions, a neural model might better approximate the complex geometry of a retraction by taking multiple small, iterative steps rather than predicting the final position in a single forward pass.</p>
-<p>The problem of finding the initial point <span class="arithmatex">\(p\)</span> becomes trivial if we are doing Image-to-Image translation (or image enhancement). We already have an anchor image <span class="arithmatex">\(x\)</span>, and we know how to project it onto the manifold using an encoder map <span class="arithmatex">\(\Pi: \mathcal{X} \to \mathcal{M}\)</span> from a standard autoencoder.</p>
-<p>However, if we want to generate an image completely from scratch, placing that initial point <span class="arithmatex">\(p \in \mathcal{M}\)</span> becomes a serious hurdle. We could try to pre-train an autoencoder, statistically analyze the latent space it forms, and compute something like a Fréchet mean on the manifold to serve as a universal starting anchor.</p>
-<p>An even more interesting problem for research is how we actually map images onto the manifold. Instead of training a traditional encoder that acts as a direct map <span class="arithmatex">\(\Pi: \mathcal{X} \to \mathcal{M}\)</span>, we can fix a single, universal base point <span class="arithmatex">\(p_0 \in \mathcal{M}\)</span> (a learned canonical state). For any given target image <span class="arithmatex">\(x \in \mathcal{X}\)</span>, the network's goal is not to predict absolute coordinates, but rather to construct a vector in the tangent space at the base point, <span class="arithmatex">\(v_x \in T_{p_0}\mathcal{M}\)</span>. The projection of the image onto the manifold is then defined through a retraction <span class="arithmatex">\(p_x = R_{p_0}(v_x)\)</span>, such that our decoding map reconstructs the image: <span class="arithmatex">\(\Sigma(R_{p_0}(v_x)) = x\)</span>. This shifts the learning paradigm from predicting absolute spatial locations on an unknown manifold to learning stable relative deformations from a shared geometric origin.</p>
+<p>The problem of finding the initial point <span class="arithmatex">\(p\)</span> becomes well-known if we are doing Image-to-Image translation (or image enhancement). We already have an anchor image <span class="arithmatex">\(x\)</span>, and we know how to project it onto the manifold using an encoder map <span class="arithmatex">\(E: \mathcal{X} \to \mathcal{M}\)</span> from a standard autoencoder.</p>
+<p>However, if we want to generate an image completely from scratch, placing that initial point <span class="arithmatex">\(p \in \mathcal{M}\)</span> becomes a question. We could try to pre-train an autoencoder, statistically analyze the latent space it forms, and compute something like a Fréchet mean on the manifold to serve as a universal starting anchor.</p>
+<p>An even more interesting problem for research is how we actually map images onto the manifold. Instead of training a traditional encoder that acts as a direct map <span class="arithmatex">\(E: \mathcal{X} \to \mathcal{M}\)</span>, we can fix a single, universal base point <span class="arithmatex">\(p_0 \in \mathcal{M}\)</span> (a learned canonical state). For any given target image <span class="arithmatex">\(x \in \mathcal{X}\)</span>, the network's goal is not to predict absolute coordinates, but rather to construct a vector in the tangent space at the base point, <span class="arithmatex">\(v_x \in T_{p_0}\mathcal{M}\)</span>. The projection of the image onto the manifold is then defined through a retraction <span class="arithmatex">\(p_x = R_{p_0}(v_x)\)</span>, such that our decoding map reconstructs the image: <span class="arithmatex">\(D(R_{p_0}(v_x)) = x\)</span>. This shifts the learning paradigm from predicting absolute spatial locations on an unknown manifold to learning stable relative deformations from a shared geometric origin.</p>
+<p align="center"><img alt="image_gen_0.svg" src="../image_gen_0.svg" /></p>
+<p>Another interesting observation is that images are deeply hierarchical: basic lines form corners, corners assemble into textures, textures build objects, and so on. This compositionality can be represented as a tree, which mathematically naturally embeds into a hyperbolic space due to its exponential volume growth. Therefore, a highly compelling idea is to model images as natively living on a hyperbolic manifold. In such a space, the initial base point <span class="arithmatex">\(p_0\)</span> becomes the Frechet mean (if path length minimization constraint is applied), and the retraction is defined strictly and analytically.</p>
+<h2 id="poincare-ball-embeddings">Poincare Ball Embeddings</h2>
+<p>The <span class="arithmatex">\(n\)</span>-dimensional Poincare ball <span class="arithmatex">\(\mathbb{B}^n\)</span> model in its simplest form was tested with MNIST dataset. The architecture is as follows:</p>
+<ol>
+<li>The starting point <span class="arithmatex">\(p_0 \in \mathbb{B}^n\)</span>, which represents the semantic center of coordinates, should become a Fréchet mean of the dataset.</li>
+<li>Encoder submodel <span class="arithmatex">\(E : \mathcal{X} \to \mathcal{M}\)</span>, which maps the input image into an empirical features manifold.</li>
+<li>Flow model <span class="arithmatex">\(\Phi : \mathcal{M} \times \mathbb{B}^n \to \mathbb{R}^n\)</span>, which maps the extracted features and the current point on the image manifold to an arbitrary <span class="arithmatex">\(n\)</span>-dimensional Euclidean vector.</li>
+<li>The point then moves iteratively across the manifold using a strict closed-form retraction along flow vector.</li>
+<li>Decoder submodel <span class="arithmatex">\(D : \mathbb{B}^n \to \mathcal{X}\)</span>, which takes the terminal point from the Poincare ball and outputs the reconstructed image.</li>
+</ol>
+<p><em>Remark: The flow operator effectively models a conditional vector field on the manifold. By evaluating both the extracted input features and the current spatial coordinate, it computes a tangent vector pointing in the direction of steepest semantic alignment with the target. The iterative retraction process can thus be viewed as discrete numerical integration along this vector field to reach the desired state.</em></p>
+<p>The PyTorch modules:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>class Encoder(nn.Module):  
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    def __init__(self, latent_dim: int):  
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        super().__init__()  
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        self.net = nn.Sequential(  
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>            nn.Conv2d(1, 16, 3, stride=2, padding=1),  
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>            nn.SiLU(True),  
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>            nn.Conv2d(16, 32, 3, stride=2, padding=1),  
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>            nn.SiLU(True),  
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>            nn.Conv2d(32, 64, 3, stride=2, padding=1),  
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>            nn.SiLU(True),  
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>            nn.AdaptiveAvgPool2d((2, 2)),  
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>            nn.Flatten(),  
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>            nn.Linear(256, latent_dim)  
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        )  
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    def forward(self, x: torch.Tensor) -&gt; torch.Tensor:  
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        return self.net(x)  
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>class FlowModel(nn.Module):  
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    def __init__(self, latent_dim: int):  
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        super().__init__()  
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        self.net = nn.Sequential(  
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>            nn.Linear(latent_dim * 2, latent_dim * 2),  
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>            nn.SiLU(True),  
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>            nn.Linear(latent_dim * 2, latent_dim)  
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>        )  
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    def forward(self, z: torch.Tensor, p_t: torch.Tensor) -&gt; torch.Tensor:  
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>        x = torch.cat([z, p_t], dim=-1)  
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>        return self.net(x)  
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>class Decoder(nn.Module):  
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>    def __init__(self, latent_dim: int):  
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>        super().__init__()  
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>        self.fc = nn.Linear(latent_dim, 64 * 7 * 7)  
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>        self.net = nn.Sequential(  
+<a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>            nn.ConvTranspose2d(64, 32, 4, stride=2, padding=1),  
+<a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>            nn.SiLU(True),  
+<a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>            nn.ConvTranspose2d(32, 16, 4, stride=2, padding=1),  
+<a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>            nn.SiLU(True),  
+<a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>
+<a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>            nn.Conv2d(16, 1, 3, padding=1),  
+<a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>
+<a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>            nn.Sigmoid()  
+<a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>        )  
+<a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>
+<a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>    def forward(self, p_t: torch.Tensor) -&gt; torch.Tensor:  
+<a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>        x = self.fc(p_t)  
+<a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>        x = x.view(-1, 64, 7, 7)  
+<a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
+<a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a>        return self.net(x)  
+<a id="__codelineno-0-59" name="__codelineno-0-59" href="#__codelineno-0-59"></a>
+<a id="__codelineno-0-60" name="__codelineno-0-60" href="#__codelineno-0-60"></a>
+<a id="__codelineno-0-61" name="__codelineno-0-61" href="#__codelineno-0-61"></a>class HyperbolicAutoencoder(nn.Module):  
+<a id="__codelineno-0-62" name="__codelineno-0-62" href="#__codelineno-0-62"></a>    def __init__(self, latent_dim: int = 64, max_steps: int = 16, tol: float = 1e-4):  
+<a id="__codelineno-0-63" name="__codelineno-0-63" href="#__codelineno-0-63"></a>        super().__init__()  
+<a id="__codelineno-0-64" name="__codelineno-0-64" href="#__codelineno-0-64"></a>        self.latent_dim = latent_dim  
+<a id="__codelineno-0-65" name="__codelineno-0-65" href="#__codelineno-0-65"></a>        self.max_steps = max_steps  
+<a id="__codelineno-0-66" name="__codelineno-0-66" href="#__codelineno-0-66"></a>        self.tol = tol  
+<a id="__codelineno-0-67" name="__codelineno-0-67" href="#__codelineno-0-67"></a>
+<a id="__codelineno-0-68" name="__codelineno-0-68" href="#__codelineno-0-68"></a>        self.ball = geoopt.PoincareBall(c=1.0)  
+<a id="__codelineno-0-69" name="__codelineno-0-69" href="#__codelineno-0-69"></a>        self.p0 = geoopt.ManifoldParameter(torch.zeros(1, latent_dim), manifold=self.ball)  
+<a id="__codelineno-0-70" name="__codelineno-0-70" href="#__codelineno-0-70"></a>
+<a id="__codelineno-0-71" name="__codelineno-0-71" href="#__codelineno-0-71"></a>        self.encoder = Encoder(latent_dim)  
+<a id="__codelineno-0-72" name="__codelineno-0-72" href="#__codelineno-0-72"></a>        self.flow = FlowModel(latent_dim)  
+<a id="__codelineno-0-73" name="__codelineno-0-73" href="#__codelineno-0-73"></a>        self.decoder = Decoder(latent_dim)  
+<a id="__codelineno-0-74" name="__codelineno-0-74" href="#__codelineno-0-74"></a>
+<a id="__codelineno-0-75" name="__codelineno-0-75" href="#__codelineno-0-75"></a>    def forward(self, x: torch.Tensor, return_embeddings: bool = False):  
+<a id="__codelineno-0-76" name="__codelineno-0-76" href="#__codelineno-0-76"></a>        batch_size = x.size(0)  
+<a id="__codelineno-0-77" name="__codelineno-0-77" href="#__codelineno-0-77"></a>
+<a id="__codelineno-0-78" name="__codelineno-0-78" href="#__codelineno-0-78"></a>        z = self.encoder(x)  
+<a id="__codelineno-0-79" name="__codelineno-0-79" href="#__codelineno-0-79"></a>        p_t = self.p0.expand(batch_size, -1)  
+<a id="__codelineno-0-80" name="__codelineno-0-80" href="#__codelineno-0-80"></a>
+<a id="__codelineno-0-81" name="__codelineno-0-81" href="#__codelineno-0-81"></a>        steps_taken = 0  
+<a id="__codelineno-0-82" name="__codelineno-0-82" href="#__codelineno-0-82"></a>        trajectory_length = 0.0  
+<a id="__codelineno-0-83" name="__codelineno-0-83" href="#__codelineno-0-83"></a>
+<a id="__codelineno-0-84" name="__codelineno-0-84" href="#__codelineno-0-84"></a>        for i in range(self.max_steps):  
+<a id="__codelineno-0-85" name="__codelineno-0-85" href="#__codelineno-0-85"></a>            steps_taken += 1  
+<a id="__codelineno-0-86" name="__codelineno-0-86" href="#__codelineno-0-86"></a>
+<a id="__codelineno-0-87" name="__codelineno-0-87" href="#__codelineno-0-87"></a>            v_raw = self.flow(z, p_t)  
+<a id="__codelineno-0-88" name="__codelineno-0-88" href="#__codelineno-0-88"></a>            v_tan = self.ball.proju(p_t, v_raw)  
+<a id="__codelineno-0-89" name="__codelineno-0-89" href="#__codelineno-0-89"></a>            v_norm = self.ball.norm(v_tan, p_t, keepdim=True)  
+<a id="__codelineno-0-90" name="__codelineno-0-90" href="#__codelineno-0-90"></a>
+<a id="__codelineno-0-91" name="__codelineno-0-91" href="#__codelineno-0-91"></a>            mask = (v_norm &gt; self.tol).float()  
+<a id="__codelineno-0-92" name="__codelineno-0-92" href="#__codelineno-0-92"></a>
+<a id="__codelineno-0-93" name="__codelineno-0-93" href="#__codelineno-0-93"></a>            if mask.sum() == 0:  
+<a id="__codelineno-0-94" name="__codelineno-0-94" href="#__codelineno-0-94"></a>                break  
+<a id="__codelineno-0-95" name="__codelineno-0-95" href="#__codelineno-0-95"></a>
+<a id="__codelineno-0-96" name="__codelineno-0-96" href="#__codelineno-0-96"></a>            trajectory_length += (v_norm * mask).mean()  
+<a id="__codelineno-0-97" name="__codelineno-0-97" href="#__codelineno-0-97"></a>
+<a id="__codelineno-0-98" name="__codelineno-0-98" href="#__codelineno-0-98"></a>            p_t = self.ball.expmap(p_t, v_tan * mask)  
+<a id="__codelineno-0-99" name="__codelineno-0-99" href="#__codelineno-0-99"></a>
+<a id="__codelineno-0-100" name="__codelineno-0-100" href="#__codelineno-0-100"></a>        out = self.decoder(p_t)  
+<a id="__codelineno-0-101" name="__codelineno-0-101" href="#__codelineno-0-101"></a>
+<a id="__codelineno-0-102" name="__codelineno-0-102" href="#__codelineno-0-102"></a>        if return_embeddings:  
+<a id="__codelineno-0-103" name="__codelineno-0-103" href="#__codelineno-0-103"></a>            return out, steps_taken, trajectory_length, p_t  
+<a id="__codelineno-0-104" name="__codelineno-0-104" href="#__codelineno-0-104"></a>
+<a id="__codelineno-0-105" name="__codelineno-0-105" href="#__codelineno-0-105"></a>        return out, steps_taken, trajectory_length
+</code></pre></div>
+<em>Remark: I know that in the Poincare ball the tangent space projection is not necessary, but I place it there for consistency with general approach.</em></p>
+<p>Reconstruction results after training, max number of retraction iterations is 64, 309.57K parameters:</p>
+<p align="center"><img alt="Pasted image 20260608161315.png" src="../Pasted%20image%2020260608161315.png" width="697" /></p>
+<p>Reconstructed <span class="arithmatex">\(p_{0}\)</span>, which should be the "mean" of all digits, and it is actually very similar to a combination of 0, 2, 3, 8 and 9. But at the same time the digit itself is not blurry or ghosty, it looks like actual handwritten digit:</p>
+<p align="center"><img alt="Pasted image 20260608161453.png" src="../Pasted%20image%2020260608161453.png" width="300" /></p>
+<p>When the model is trained, we can use the decoder network to generate new digits, for example we can smoothly interpolate through geodesic curve between two digits, and obtain new one:</p>
+<p align="center"><img alt="poincare_mnist_d3.gif" src="../poincare_mnist_d3.gif" width="300" /></p>
+<p align="center"><img alt="poincare_mnist_d7.gif" src="../poincare_mnist_d7.gif" width="300" /></p>
+<p align="center"><img alt="poincare_mnist_d8.gif" src="../poincare_mnist_d8.gif" width="300" /></p>
+<p>Let's call the first digit <span class="arithmatex">\(\gamma(0) = u\)</span> and the second digit <span class="arithmatex">\(\gamma(1) = v\)</span>, to interpolate between these points, we simply lift <span class="arithmatex">\(v\)</span> to <span class="arithmatex">\(T_{u}\mathbb{B}^n\)</span> via log map and call the <span class="arithmatex">\(\gamma(t) = \text{exp}_{u}(t \cdot \text{log}_{u}(v))\)</span>. We can use this approach to perform interpolation between arbitrary number of points.</p>
+<p>Interesting animations of morphisms between different digits:</p>
+<p align="center"><img alt="poincare_mnist_d67.gif" src="../poincare_mnist_d67.gif" width="300" /></p>
+<p align="center"><img alt="poincare_mnist_d38.gif" src="../poincare_mnist_d38.gif" width="300" /></p>
+<h2 id="following-idea">Following Idea</h2>
+<p>I think the next idea is to train the autoencoder-like model but, when the input and output images are different. This will be useful, when we do not want to use hyperbolic or another analytically closed space for image embeddings. Then the flow operator will become learned retraction operator, if there is some path regularization, that keeps each point on manifold (like GAN). With this, we can robustly generate new images, for example in setup, where there is another submodule for text projection, moving random or learned point in direction of text constraint vector will produce images guided by this description.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This formulation presents an interesting method for learning empirical or analytical image manifolds. In the specific case of the Poincare ball, the reconstruction results for digits are visually pleasant, and the intermediate steps along the geodesic curves look realistic, avoiding typical ghosting effects. Building upon this, extending the framework to asymmetrical input-output pairs could allow the flow operator to act as a learned retraction. With proper path regularization, this approach offers a robust foundation for semantically guided image generation, even outside of strictly analytically closed spaces.</p>
 
 
 
